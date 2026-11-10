@@ -1,0 +1,37 @@
+<group name="mini_soc,windows,sysmon,">
+
+  <rule id="100100" level="10">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\powershell(?:\.exe)?$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(?:-enc|-encodedcommand)\b</field>
+    <description>Mini SOC: PowerShell executed with an encoded command.</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+    <group>execution,powershell,mini_soc_detection,</group>
+  </rule>
+
+  <rule id="100101" level="10">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\powershell(?:\.exe)?$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(Invoke-WebRequest|iwr\b|DownloadString|Net\.WebClient)</field>
+    <description>Mini SOC: PowerShell web-download pattern observed.</description>
+    <mitre>
+      <id>T1059.001</id>
+      <id>T1105</id>
+    </mitre>
+    <group>execution,command_and_control,powershell,mini_soc_detection,</group>
+  </rule>
+
+  <rule id="100102" level="6">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\(whoami|ipconfig|netstat)\.exe$</field>
+    <description>Mini SOC: System or network discovery utility executed.</description>
+    <mitre>
+      <id>T1016</id>
+      <id>T1033</id>
+    </mitre>
+    <group>discovery,mini_soc_detection,</group>
+  </rule>
+
+</group>
